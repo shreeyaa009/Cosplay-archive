@@ -25,7 +25,6 @@ const defaultCategories = [
 ];
 
 
-
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     loadTheme();
@@ -57,11 +56,16 @@ function updateThemeIcon() {
 // Data Management
 function loadCharacters() {
     const stored = localStorage.getItem('cosplayCharacters');
+
     if (stored) {
         characters = JSON.parse(stored);
+
+        // Remove old sample character if it exists
+        characters = characters.filter(character => character.id !== 'sample-1');
+
+        saveCharacters();
     } else {
-        // Load sample data for first-time users
-        characters = [...sampleCharacters];
+        characters = [];
         saveCharacters();
     }
 }
