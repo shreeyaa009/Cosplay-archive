@@ -24,36 +24,6 @@ const defaultCategories = [
     'Other'
 ];
 
-// Sample data (will be removed once user adds their own)
-const sampleCharacters = [
-    {
-        id: 'sample-1',
-        characterName: 'Sakura Haruno',
-        animeName: 'Naruto',
-        imageUrl: 'https://i.pinimg.com/736x/73/56/0d/73560d032f2813dc091f1e4804b70aff.jpg',
-        status: 'want-to-cosplay',
-        category: 'Casual',
-        difficulty: 'medium',
-        tags: ['pink hair', 'ninja', 'medical ninja'],
-        notes: 'Need to find good wig styling tutorial',
-        favorite: true,
-        createdAt: new Date().toISOString()
-    },
-    {
-        id: 'sample-2',
-        characterName: 'Mikasa Ackerman',
-        animeName: 'Attack on Titan',
-        imageUrl: 'https://i.pinimg.com/736x/31/ab/a6/31aba6b19f86ae88cf682eb5f07e886b.jpg',
-        status: 'planning',
-        category: 'Combat',
-        difficulty: 'hard',
-        tags: ['scarf', 'military', 'short hair'],
-        notes: 'Red scarf is essential',
-        favorite: false,
-        createdAt: new Date(Date.now() - 86400000).toISOString()
-    }
-];
-
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     loadTheme();
