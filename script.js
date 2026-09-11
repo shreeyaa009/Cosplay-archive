@@ -24,6 +24,8 @@ const defaultCategories = [
     'Other'
 ];
 
+
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     loadTheme();
