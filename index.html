@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosplay Archive ♡</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Pacifico&family=Varela+Round&family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-stickers">
+            <img src="https://i.pinimg.com/736x/73/56/0d/73560d032f2813dc091f1e4804b70aff.jpg" alt="Nezuko chibi" class="header-sticker header-sticker-left" onerror="this.src='https://i.pinimg.com/736x/38/16/28/381628f1be9d6f61d7eebd108858978f.jpg';">
+            <img src="https://i.pinimg.com/736x/38/16/28/381628f1be9d6f61d7eebd108858978f.jpg" alt="Paimon chibi" class="header-sticker header-sticker-right" onerror="this.src='https://i.pinimg.com/736x/73/56/0d/73560d032f2813dc091f1e4804b70aff.jpg';">
+        </div>
+        <div class="header-content">
+            <div class="logo">
+                <img src="https://i.pinimg.com/736x/31/ab/a6/31aba6b19f86ae88cf682eb5f07e886b.jpg" alt="Bronya chibi" class="logo-sticker" onerror="this.src='https://i.pinimg.com/736x/e1/dd/ab/e1ddab837bccca24a00dd7b3d63c88ab.jpg';">
+                <div class="logo-text-container">
+                    <h1 class="logo-text">Cosplay Archive</h1>
+                    <span class="logo-subtitle">♡ Your Dream Characters ♡</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <button class="btn btn-primary" id="addCharacterBtn">
+                    <span class="btn-icon">🎀</span>
+                    Add Character
+                </button>
+            </div>
+        </div>
+        <div class="header-decoration">
+            <span class="decoration-star">✦</span>
+            <span class="decoration-heart">♡</span>
+            <span class="decoration-star">✦</span>
+            <span class="decoration-flower">🌸</span>
+            <span class="decoration-sparkle">✨</span>
+            <span class="decoration-ribbon">🎀</span>
+            <span class="decoration-star">✦</span>
+            <span class="decoration-heart">♡</span>
+        </div>
+        <div class="header-lace"></div>
+    </header>
+
+    <!-- Navigation & Controls -->
+    <nav class="nav-controls">
+        <div class="nav-decoration">
+            <span>🌸</span>
+            <span>✨</span>
+            <span>🎀</span>
+        </div>
+        <div class="nav-left">
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search characters, anime, tags...">
+                <span class="search-icon">🔍</span>
+            </div>
+        </div>
+        <div class="nav-right">
+            <button class="filter-toggle" id="filterToggle">
+                <span>Filters</span>
+                <span class="filter-count" id="filterCount">0</span>
+            </button>
+            <div class="sort-container">
+                <select class="sort-select" id="sortSelect">
+                    <option value="recent">Recently Added</option>
+                    <option value="oldest">Oldest Added</option>
+                    <option value="name-asc">Name A-Z</option>
+                    <option value="name-desc">Name Z-A</option>
+                    <option value="completed">Completed</option>
+                    <option value="not-completed">Not Completed</option>
+                </select>
+            </div>
+        </div>
+        <div class="nav-decoration-bottom">
+            <span>♡</span>
+            <span>✦</span>
+            <span>♡</span>
+        </div>
+        <div class="nav-stickers">
+            <img src="https://i.pinimg.com/736x/e1/dd/ab/e1ddab837bccca24a00dd7b3d63c88ab.jpg" alt="Ganyu chibi" class="nav-sticker" onerror="this.style.display='none';">
+            <img src="https://i.pinimg.com/736x/9d/83/91/9d8391c864e04ede5148d59a055e66f2.jpg" alt="Miku chibi" class="nav-sticker" onerror="this.style.display='none';">
+        </div>
+    </nav>
+
+    <!-- Filter Panel -->
+    <div class="filter-panel" id="filterPanel">
+        <div class="filter-header">
+            <h3>Filters</h3>
+            <button class="clear-filters" id="clearFilters">Clear All</button>
+        </div>
+        <div class="filter-sections">
+            <div class="filter-section">
+                <label>Status</label>
+                <div class="filter-options" id="statusFilters">
+                    <label class="filter-option">
+                        <input type="checkbox" value="want-to-cosplay">
+                        <span>♡ Want to Cosplay</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="planning">
+                        <span>◌ Planning</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="making">
+                        <span>✦ Making</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="completed">
+                        <span>✓ Completed</span>
+                    </label>
+                </div>
+            </div>
+            <div class="filter-section">
+                <label>Category</label>
+                <div class="filter-options" id="categoryFilters">
+                    <!-- Dynamic categories will be added here -->
+                </div>
+            </div>
+            <div class="filter-section">
+                <label>Difficulty</label>
+                <div class="filter-options" id="difficultyFilters">
+                    <label class="filter-option">
+                        <input type="checkbox" value="easy">
+                        <span>Easy</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="medium">
+                        <span>Medium</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="hard">
+                        <span>Hard</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="expert">
+                        <span>Expert</span>
+                    </label>
+                </div>
+            </div>
+            <div class="filter-section">
+                <label>Other</label>
+                <div class="filter-options">
+                    <label class="filter-option">
+                        <input type="checkbox" id="favoriteFilter">
+                        <span>⭐ Favorites Only</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics -->
+    <section class="statistics" id="statistics">
+        <div class="stat-card">
+            <img src="https://i.pinimg.com/736x/ff/9a/75/ff9a75dbb24341f70e4392037317a2b7.jpg" alt="Mami chibi" class="stat-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+            <span class="stat-icon" style="display: none;">📚</span>
+            <div class="stat-content">
+                <span class="stat-value" id="statTotal">0</span>
+                <span class="stat-label">Total</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <img src="https://i.pinimg.com/736x/73/56/0d/73560d032f2813dc091f1e4804b70aff.jpg" alt="Nezuko chibi" class="stat-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+            <span class="stat-icon" style="display: none;">♡</span>
+            <div class="stat-content">
+                <span class="stat-value" id="statWant">0</span>
+                <span class="stat-label">Want to Cosplay</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <img src="https://i.pinimg.com/736x/38/16/28/381628f1be9d6f61d7eebd108858978f.jpg" alt="Paimon chibi" class="stat-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+            <span class="stat-icon" style="display: none;">◌</span>
+            <div class="stat-content">
+                <span class="stat-value" id="statPlanning">0</span>
+                <span class="stat-label">Planning</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <img src="https://i.pinimg.com/736x/31/ab/a6/31aba6b19f86ae88cf682eb5f07e886b.jpg" alt="Bronya chibi" class="stat-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+            <span class="stat-icon" style="display: none;">✦</span>
+            <div class="stat-content">
+                <span class="stat-value" id="statMaking">0</span>
+                <span class="stat-label">Making</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <img src="https://i.pinimg.com/736x/e1/dd/ab/e1ddab837bccca24a00dd7b3d63c88ab.jpg" alt="Ganyu chibi" class="stat-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+            <span class="stat-icon" style="display: none;">✓</span>
+            <div class="stat-content">
+                <span class="stat-value" id="statCompleted">0</span>
+                <span class="stat-label">Completed</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Decorative elements -->
+        <div class="main-decoration">
+            <span class="decoration-left">🌸</span>
+            <span class="decoration-right">✨</span>
+        </div>
+        
+        <!-- Floating anime characters -->
+        <div class="floating-characters">
+            <img src="https://i.pinimg.com/736x/75/05/e8/7505e851c01310ed3d724fa15c4a1076.jpg" alt="Cute anime" class="floating-char" style="top: 10%; left: 2%;">
+            <img src="https://i.pinimg.com/736x/c3/fe/1f/c3fe1f5623cba200bbe171a0fcdb7078.jpg" alt="Cute anime" class="floating-char" style="top: 30%; right: 3%;">
+            <img src="https://i.pinimg.com/736x/73/56/0d/73560d032f2813dc091f1e4804b70aff.jpg" alt="Cute anime" class="floating-char" style="top: 60%; left: 4%;">
+            <img src="https://i.pinimg.com/736x/38/16/28/381628f1be9d6f61d7eebd108858978f.jpg" alt="Cute anime" class="floating-char" style="top: 80%; right: 2%;">
+        </div>
+        
+        <!-- Character Gallery -->
+        <section class="gallery" id="gallery">
+            <!-- Character cards will be dynamically generated -->
+        </section>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-content">
+                <img src="https://i.pinimg.com/736x/b7/8e/55/b78e55c190030668391134a0c31ead4c.jpg" alt="Miku chibi" class="empty-sticker" onerror="this.src='https://i.pinimg.com/736x/9d/83/91/9d8391c864e04ede5148d59a055e66f2.jpg';">
+                <h2 class="empty-title">No cosplays here yet ♡</h2>
+                <p class="empty-message">Start building your dream cosplay collection!</p>
+                <button class="btn btn-primary btn-large" id="emptyAddBtn">
+                    <span class="btn-icon">🎀</span>
+                    Add your first character
+                </button>
+            </div>
+        </div>
+
+        <!-- No Results State -->
+        <div class="empty-state" id="noResultsState" style="display: none;">
+            <div class="empty-content">
+                <img src="https://i.pinimg.com/736x/ee/44/43/ee4443bb015f9878273a3462391a250c.jpg" alt="Quintuplets chibi" class="empty-sticker" onerror="this.src='https://i.pinimg.com/736x/b7/8e/55/b78e55c190030668391134a0c31ead4c.jpg';">
+                <h2 class="empty-title">No matches found 🌸</h2>
+                <p class="empty-message">Try adjusting your search or filters</p>
+                <button class="btn btn-secondary" id="clearSearchBtn">
+                    Clear Search
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Data Management -->
+    <section class="data-management">
+        <button class="btn btn-secondary" id="exportBtn">
+            <span class="btn-icon">📤</span>
+            Export Collection
+        </button>
+        <button class="btn btn-secondary" id="importBtn">
+            <span class="btn-icon">📥</span>
+            Import Collection
+        </button>
+        <input type="file" id="importFile" accept=".json" style="display: none;">
+        <button class="btn btn-danger" id="clearAllBtn">
+            <span class="btn-icon">🗑️</span>
+            Clear All Data
+        </button>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <span>Made with ♡ for cosplayers</span>
+            <div class="footer-decoration">
+                <span>✦</span>
+                <span>♡</span>
+                <span>✦</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Add/Edit Character Modal -->
+    <div class="modal" id="characterModal">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Add Character</h2>
+                <button class="modal-close" id="modalClose">×</button>
+            </div>
+            <form class="modal-form" id="characterForm">
+                <input type="hidden" id="characterId">
+                
+                <div class="form-group">
+                    <label for="characterName">Character Name *</label>
+                    <input type="text" id="characterName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="animeName">Anime / Manga *</label>
+                    <input type="text" id="animeName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="imageUrl">Image URL *</label>
+                    <input type="url" id="imageUrl" required>
+                    <div class="image-preview" id="imagePreview">
+                        <span class="preview-placeholder">Image preview will appear here</span>
+                        <img id="previewImage" style="display: none;" alt="Preview">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select id="status">
+                            <option value="want-to-cosplay">♡ Want to Cosplay</option>
+                            <option value="planning">◌ Planning</option>
+                            <option value="making">✦ Making</option>
+                            <option value="completed">✓ Completed</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="difficulty">Difficulty</label>
+                        <select id="difficulty">
+                            <option value="easy">Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard</option>
+                            <option value="expert">Expert</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category">
+                        <option value="">Select category</option>
+                        <option value="School Uniform">School Uniform</option>
+                        <option value="Casual">Casual</option>
+                        <option value="Dress">Dress</option>
+                        <option value="Kimono">Kimono</option>
+                        <option value="Fantasy">Fantasy</option>
+                        <option value="Armor">Armor</option>
+                        <option value="Combat">Combat</option>
+                        <option value="Formal">Formal</option>
+                        <option value="Historical">Historical</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <button type="button" class="btn-text" id="addCategoryBtn">+ Add new category</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="tags">Tags (comma separated)</label>
+                    <input type="text" id="tags" placeholder="e.g., long hair, sword, magical girl">
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <textarea id="notes" rows="3" placeholder="Add any notes about this cosplay..."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-icon">✦</span>
+                        Save Character
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Character Details Modal -->
+    <div class="modal" id="detailsModal">
+        <div class="modal-overlay" id="detailsOverlay"></div>
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 class="modal-title">Character Details</h2>
+                <button class="modal-close" id="detailsClose">×</button>
+            </div>
+            <div class="character-details" id="characterDetails">
+                <!-- Details will be dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Dialog -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-overlay" id="confirmOverlay"></div>
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2 class="modal-title" id="confirmTitle">Confirm</h2>
+                <button class="modal-close" id="confirmClose">×</button>
+            </div>
+            <div class="confirm-content">
+                <p id="confirmMessage">Are you sure?</p>
+                <div class="confirm-actions">
+                    <button class="btn btn-secondary" id="confirmCancel">Cancel</button>
+                    <button class="btn btn-danger" id="confirmOk">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
