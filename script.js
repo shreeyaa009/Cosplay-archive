@@ -8,6 +8,8 @@ let currentFilters = {
 };
 let currentSort = 'recent';
 let searchQuery = '';
+let currentPage = 1;
+const charactersPerPage = 4;
 let currentTheme = localStorage.getItem('theme') || 'light';
 
 // Default categories
@@ -142,11 +144,13 @@ function renderGallery() {
     const gallery = document.getElementById('gallery');
     const emptyState = document.getElementById('emptyState');
     const noResultsState = document.getElementById('noResultsState');
-    
+
     let filteredCharacters = filterAndSortCharacters();
-    
+
+    // No characters at all
     if (filteredCharacters.length === 0) {
         gallery.style.display = 'none';
+
         if (characters.length === 0) {
             emptyState.style.display = 'block';
             noResultsState.style.display = 'none';
@@ -154,15 +158,40 @@ function renderGallery() {
             emptyState.style.display = 'none';
             noResultsState.style.display = 'block';
         }
+
+        renderPagination(0);
         return;
     }
-    
+
     emptyState.style.display = 'none';
     noResultsState.style.display = 'none';
     gallery.style.display = 'grid';
-    
-    gallery.innerHTML = filteredCharacters.map(character => createCharacterCard(character)).join('');
-    
+
+    // Calculate pagination
+    const totalPages = Math.ceil(filteredCharacters.length / charactersPerPage);
+
+    // Make sure current page is valid
+    if (currentPage > totalPages) {
+        currentPage = totalPages;
+    }
+
+    if (currentPage < 1) {
+        currentPage = 1;
+    }
+
+    const startIndex = (currentPage - 1) * charactersPerPage;
+    const endIndex = startIndex + charactersPerPage;
+
+    const paginatedCharacters = filteredCharacters.slice(
+        startIndex,
+        endIndex
+    );
+
+    // Render only characters for current page
+    gallery.innerHTML = paginatedCharacters
+        .map(character => createCharacterCard(character))
+        .join('');
+
     // Add event listeners to cards
     document.querySelectorAll('.character-card').forEach(card => {
         card.addEventListener('click', (e) => {
@@ -172,7 +201,7 @@ function renderGallery() {
             }
         });
     });
-    
+
     // Add event listeners to favorite buttons
     document.querySelectorAll('.favorite-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -180,6 +209,82 @@ function renderGallery() {
             const id = btn.dataset.id;
             toggleFavorite(id);
         });
+    });
+
+    // Render pagination controls
+    renderPagination(filteredCharacters.length);
+}
+
+function renderPagination(totalItems) {
+    const pagination = document.getElementById('pagination');
+
+    if (!pagination) return;
+
+    const totalPages = Math.ceil(totalItems / charactersPerPage);
+
+    // Hide pagination when there is only one page
+    if (totalPages <= 1) {
+        pagination.innerHTML = '';
+        pagination.style.display = 'none';
+        return;
+    }
+
+    pagination.style.display = 'flex';
+
+    let buttons = '';
+
+    // Previous button
+    buttons += `
+        <button 
+            class="pagination-btn"
+            onclick="changePage(${currentPage - 1})"
+            ${currentPage === 1 ? 'disabled' : ''}
+        >
+            ‹
+        </button>
+    `;
+
+    // Page numbers
+    for (let page = 1; page <= totalPages; page++) {
+        buttons += `
+            <button 
+                class="pagination-btn ${page === currentPage ? 'active' : ''}"
+                onclick="changePage(${page})"
+            >
+                ${page}
+            </button>
+        `;
+    }
+
+    // Next button
+    buttons += `
+        <button 
+            class="pagination-btn"
+            onclick="changePage(${currentPage + 1})"
+            ${currentPage === totalPages ? 'disabled' : ''}
+        >
+            ›
+        </button>
+    `;
+
+    pagination.innerHTML = buttons;
+}
+
+function changePage(page) {
+    const filteredCharacters = filterAndSortCharacters();
+    const totalPages = Math.ceil(
+        filteredCharacters.length / charactersPerPage
+    );
+
+    if (page < 1 || page > totalPages) return;
+
+    currentPage = page;
+    renderGallery();
+
+    // Scroll back to gallery
+    document.getElementById('gallery').scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
     });
 }
 
@@ -594,6 +699,7 @@ function handleFilterChange() {
     
     currentFilters.favorite = document.getElementById('favoriteFilter').checked;
     
+    currentPage = 1;
     updateFilterCount();
     renderGallery();
 }
@@ -620,6 +726,7 @@ function clearFilters() {
         favorite: false
     };
     
+    currentPage = 1;
     updateFilterCount();
     renderGallery();
 }
@@ -627,18 +734,21 @@ function clearFilters() {
 // Search Handling
 function handleSearch(e) {
     searchQuery = e.target.value;
+    currentPage = 1;
     renderGallery();
 }
 
 function clearSearch() {
     document.getElementById('searchInput').value = '';
     searchQuery = '';
+    currentPage = 1;
     renderGallery();
 }
 
 // Sort Handling
 function handleSort(e) {
     currentSort = e.target.value;
+    currentPage = 1;
     renderGallery();
 }
 
