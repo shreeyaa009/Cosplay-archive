@@ -872,10 +872,38 @@ function showToast(message) {
 
 // Event Listeners
 function initializeEventListeners() {
-    // Theme toggle
+    // Theme toggle 
     document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+    // Logout confirmation
+const logoutBtn = document.getElementById('logoutBtn');
+const logoutConfirmModal = document.getElementById('logoutConfirmModal');
+const logoutConfirmBtn = document.getElementById('logoutConfirmBtn');
+const logoutCancelBtn = document.getElementById('logoutCancelBtn');
+const logoutCancelTop = document.getElementById('logoutCancelTop');
+
+logoutBtn.addEventListener('click', () => {
+    logoutConfirmModal.classList.add('active');
+});
+
+logoutCancelBtn.addEventListener('click', () => {
+    logoutConfirmModal.classList.remove('active');
+});
+
+logoutCancelTop.addEventListener('click', () => {
+    logoutConfirmModal.classList.remove('active');
+});
+
+logoutConfirmModal.querySelector('.modal-overlay').addEventListener('click', () => {
+    logoutConfirmModal.classList.remove('active');
+});
+
+logoutConfirmBtn.addEventListener('click', () => {
+    localStorage.removeItem('cosplayAuthToken');
+    window.location.replace('login.html');
+});
     
-    // Add character button
+    // Add character button 
     document.getElementById('addCharacterBtn').addEventListener('click', openAddCharacterModal);
     document.getElementById('emptyAddBtn').addEventListener('click', openAddCharacterModal);
     

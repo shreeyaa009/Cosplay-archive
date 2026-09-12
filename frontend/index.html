@@ -16,6 +16,47 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Pacifico&family=Varela+Round&family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
+<!-- Logout Confirmation Modal -->
+<div class="modal" id="logoutConfirmModal">
+    <div class="modal-overlay"></div>
+
+    <div class="modal-content modal-small logout-modal">
+        <div class="modal-header">
+            <h2 class="modal-title">Leaving already? 🎀</h2>
+
+            <button
+                class="modal-close"
+                id="logoutCancelTop"
+                aria-label="Close"
+            >
+                ×
+            </button>
+        </div>
+
+        <div class="logout-message">
+            <div class="logout-sparkles">✨ 🌸 ✨</div>
+
+            <div class="logout-icon">🥺</div>
+
+            <p>Are you sure you want to log out?</p>
+            <span>Your cosplay collection will still be here when you come back! 💕</span>
+        </div>
+
+        <div class="modal-actions logout-actions">
+            <button class="btn btn-secondary" id="logoutCancelBtn">
+                <span class="btn-icon">♡</span>
+                Stay
+            </button>
+
+            <button class="btn btn-primary" id="logoutConfirmBtn">
+                <span class="btn-icon">🎀</span>
+                Log out
+            </button>
+        </div>
+    </div>
+</div>
+
 <body>
     <!-- Header -->
     <header class="header">
@@ -32,14 +73,18 @@
                 </div>
             </div>
             <div class="header-actions">
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                    <span class="theme-icon">🌙</span>
-                </button>
-                <button class="btn btn-primary" id="addCharacterBtn">
-                    <span class="btn-icon">🎀</span>
-                    Add Character
-                </button>
-            </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span class="theme-icon">🌙</span>
+    </button>
+
+    <button class="btn btn-primary" id="addCharacterBtn">
+        <span class="btn-icon">🎀</span> Add Character
+    </button>
+
+    <button class="btn btn-secondary" id="logoutBtn">
+        <span class="btn-icon">♡</span> Logout
+    </button>
+</div>
         </div>
         <div class="header-decoration">
             <span class="decoration-star">✦</span>

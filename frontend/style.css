@@ -1198,6 +1198,38 @@ body {
     box-shadow: 0 4px 12px rgba(255, 183, 197, 0.4);
 }
 
+/* Cute Header Logout Button */
+.header-actions .btn-secondary {
+    background: rgba(255, 255, 255, 0.75);
+    color: var(--text-secondary);
+    border: 2px solid var(--accent-secondary);
+    padding: 0.75rem 1.25rem;
+    border-radius: 999px;
+    box-shadow: 0 3px 10px rgba(255, 183, 197, 0.18);
+    backdrop-filter: blur(6px);
+}
+
+.header-actions .btn-secondary:hover {
+    background: linear-gradient(
+        135deg,
+        var(--accent-secondary) 0%,
+        var(--accent-primary) 100%
+    );
+    color: white;
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 183, 197, 0.35);
+}
+
+.header-actions .btn-secondary .btn-icon {
+    font-size: 1rem;
+    transition: transform var(--transition-fast);
+}
+
+.header-actions .btn-secondary:hover .btn-icon {
+    transform: scale(1.15) rotate(-8deg);
+}
+
 .btn-danger {
     background: linear-gradient(135deg, #ff8a9b 0%, #ff6b7a 100%);
     color: white;
@@ -2394,4 +2426,107 @@ body {
     .pagination-btn:last-child {
         font-size: 1.1rem;
     }
+}
+
+/* ==========================================
+   Cute Logout Confirmation
+   ========================================== */
+
+.logout-modal {
+    text-align: center;
+    overflow: hidden;
+}
+
+.logout-message {
+    padding: 1.75rem 1.75rem 1rem;
+    position: relative;
+}
+
+.logout-sparkles {
+    font-size: 1.15rem;
+    letter-spacing: 0.5rem;
+    margin-bottom: 0.5rem;
+    animation: twinkle 2.5s ease-in-out infinite;
+}
+
+.logout-icon {
+    width: 78px;
+    height: 78px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(
+        135deg,
+        var(--accent-secondary),
+        var(--accent-tertiary)
+    );
+
+    border: 3px solid var(--accent-primary);
+    box-shadow: 0 6px 18px rgba(255, 183, 197, 0.3);
+
+    font-size: 2.2rem;
+
+    animation: bounce 2s ease-in-out infinite;
+}
+
+.logout-message p {
+    font-family: var(--font-cute);
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    margin-bottom: 0.45rem;
+}
+
+.logout-message span {
+    display: block;
+    font-family: var(--font-round);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.logout-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem 1.75rem;
+}
+
+.logout-actions .btn {
+    min-width: 115px;
+    justify-content: center;
+}
+
+/* Slightly softer Stay button */
+.logout-actions .btn-secondary {
+    background: linear-gradient(
+        135deg,
+        #ffffff 0%,
+        var(--bg-secondary) 100%
+    );
+}
+
+.logout-actions .btn-secondary:hover {
+    background: linear-gradient(
+        135deg,
+        var(--bg-secondary) 0%,
+        var(--accent-secondary) 100%
+    );
+}
+
+/* Dark theme */
+[data-theme="dark"] .logout-icon {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .logout-actions .btn-secondary {
+    background: linear-gradient(
+        135deg,
+        var(--bg-card) 0%,
+        var(--bg-secondary) 100%
+    );
 }
