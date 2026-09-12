@@ -45,17 +45,16 @@ app.get('/api/test-db', async (req, res) => {
 
 app.post('/api/auth/register', async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { username, password } = req.body;
 
         // Check required fields
-        if (!username || !email || !password) {
+        if (!username || !password) {
             return res.status(400).json({
-                error: 'Username, email, and password are required.'
+                error: 'Username and password are required.'
             });
         }
 
         const cleanUsername = username.trim();
-        const cleanEmail = email.trim().toLowerCase();
 
         // Username validation
         if (cleanUsername.length < 3) {
@@ -67,15 +66,6 @@ app.post('/api/auth/register', async (req, res) => {
         if (cleanUsername.length > 50) {
             return res.status(400).json({
                 error: 'Username cannot be longer than 50 characters.'
-            });
-        }
-
-        // Email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!emailRegex.test(cleanEmail)) {
-            return res.status(400).json({
-                error: 'Please enter a valid email address.'
             });
         }
 
@@ -105,37 +95,20 @@ app.post('/api/auth/register', async (req, res) => {
             });
         }
 
-        // Check if username or email already exists
+        // Check if username already exists
         const existingUser = await pool.query(
             `
-            SELECT id, username, email
+            SELECT id, username
             FROM users
             WHERE LOWER(username) = LOWER($1)
-               OR LOWER(email) = LOWER($2)
             `,
-            [cleanUsername, cleanEmail]
+            [cleanUsername]
         );
 
         if (existingUser.rows.length > 0) {
-            const existing = existingUser.rows[0];
-
-            if (
-                existing.username.toLowerCase() ===
-                cleanUsername.toLowerCase()
-            ) {
-                return res.status(409).json({
-                    error: 'Username is already taken.'
-                });
-            }
-
-            if (
-                existing.email.toLowerCase() ===
-                cleanEmail.toLowerCase()
-            ) {
-                return res.status(409).json({
-                    error: 'Email is already registered.'
-                });
-            }
+            return res.status(409).json({
+                error: 'Username is already taken.'
+            });
         }
 
         // Hash password
@@ -146,15 +119,13 @@ app.post('/api/auth/register', async (req, res) => {
             `
             INSERT INTO users (
                 username,
-                email,
                 password_hash
             )
-            VALUES ($1, $2, $3)
-            RETURNING id, username, email, created_at
+            VALUES ($1, $2)
+            RETURNING id, username, created_at
             `,
             [
                 cleanUsername,
-                cleanEmail,
                 passwordHash
             ]
         );
@@ -183,26 +154,25 @@ app.post('/api/auth/login', async (req, res) => {
         // Check required fields
         if (!identifier || !password) {
             return res.status(400).json({
-                error: 'Username/email and password are required.'
+                error: 'Username and password are required.'
             });
         }
 
-        const cleanIdentifier = identifier.trim().toLowerCase();
+        const cleanUsername = identifier.trim().toLowerCase();
 
-        // Find user by username OR email
+        // Find user by username only
         const result = await pool.query(
             `
-            SELECT id, username, email, password_hash
+            SELECT id, username, password_hash
             FROM users
             WHERE LOWER(username) = $1
-               OR LOWER(email) = $1
             `,
-            [cleanIdentifier]
+            [cleanUsername]
         );
 
         if (result.rows.length === 0) {
             return res.status(401).json({
-                error: 'Invalid username/email or password.'
+                error: 'Invalid username or password.'
             });
         }
 
@@ -216,7 +186,7 @@ app.post('/api/auth/login', async (req, res) => {
 
         if (!passwordMatch) {
             return res.status(401).json({
-                error: 'Invalid username/email or password.'
+                error: 'Invalid username or password.'
             });
         }
 
@@ -224,8 +194,7 @@ app.post('/api/auth/login', async (req, res) => {
         const token = jwt.sign(
             {
                 id: user.id,
-                username: user.username,
-                email: user.email
+                username: user.username
             },
             process.env.JWT_SECRET,
             {
@@ -238,8 +207,7 @@ app.post('/api/auth/login', async (req, res) => {
             token,
             user: {
                 id: user.id,
-                username: user.username,
-                email: user.email
+                username: user.username
             }
         });
 
@@ -274,7 +242,7 @@ app.get('/api/auth/me', async (req, res) => {
 
         const result = await pool.query(
             `
-            SELECT id, username, email, created_at
+            SELECT id, username, created_at
             FROM users
             WHERE id = $1
             `,
@@ -308,6 +276,7 @@ app.get('/api/auth/me', async (req, res) => {
         });
     }
 });
+
 
 // START SERVER
 
