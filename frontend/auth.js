@@ -1,9 +1,7 @@
 const API_URL = 'https://cosplay-archive-backend.onrender.com/api';
 
 
-/* =========================================================
-   PASSWORD VISIBILITY
-   ========================================================= */
+/*PASSWORD VISIBILITY */
 
 document.querySelectorAll('.password-toggle').forEach(button => {
 
@@ -42,9 +40,7 @@ document.querySelectorAll('.password-toggle').forEach(button => {
 });
 
 
-/* =========================================================
-   MESSAGE HELPERS
-   ========================================================= */
+/* MESSAGE HELPERS */
 
 function showMessage(element, message, type) {
 
@@ -66,9 +62,7 @@ function clearMessage(element) {
 }
 
 
-/* =========================================================
-   LOGIN
-   ========================================================= */
+/*LOGIN */
 
 const loginForm = document.getElementById('loginForm');
 
@@ -165,12 +159,6 @@ if (loginForm) {
             }
 
 
-            /*
-             * Save authentication information.
-             * The main website can use this token later
-             * when we connect character data to users.
-             */
-
             localStorage.setItem(
                 'cosplayAuthToken',
                 data.token
@@ -226,9 +214,7 @@ if (loginForm) {
 }
 
 
-/* =========================================================
-   SIGNUP
-   ========================================================= */
+/* SIGNUP */
 
 const signupForm = document.getElementById('signupForm');
 
