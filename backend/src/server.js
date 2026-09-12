@@ -12,6 +12,46 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// AUTHENTICATION MIDDLEWARE
+
+function authenticateToken(req, res, next) {
+    try {
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({
+                error: 'Authentication required.'
+            });
+        }
+
+        const token = authHeader.split(' ')[1];
+
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
+
+        req.user = decoded;
+
+        next();
+
+    } catch (error) {
+        console.error('Token authentication error:', error);
+
+        if (
+            error.name === 'JsonWebTokenError' ||
+            error.name === 'TokenExpiredError'
+        ) {
+            return res.status(401).json({
+                error: 'Invalid or expired token.'
+            });
+        }
+
+        return res.status(500).json({
+            error: 'Authentication failed.'
+        });
+    }
+}
 
 // TEST ROUTES
 
@@ -277,6 +317,326 @@ app.get('/api/auth/me', async (req, res) => {
     }
 });
 
+// CHARACTER ROUTES
+// GET ALL CHARACTERS FOR LOGGED-IN USER
+
+app.get('/api/characters', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const result = await pool.query(
+            `
+            SELECT
+                id,
+                character_name AS "characterName",
+                anime_name AS "animeName",
+                image_url AS "imageUrl",
+                status,
+                difficulty,
+                category,
+                tags,
+                notes,
+                favorite,
+                created_at AS "createdAt",
+                updated_at AS "updatedAt"
+            FROM characters
+            WHERE user_id = $1
+            ORDER BY created_at DESC
+            `,
+            [userId]
+        );
+
+        res.json({
+            characters: result.rows
+        });
+
+    } catch (error) {
+        console.error('Get characters error:', error);
+
+        res.status(500).json({
+            error: 'Something went wrong while loading characters.'
+        });
+    }
+});
+
+
+// ADD CHARACTER
+
+app.post('/api/characters', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const {
+            id,
+            characterName,
+            animeName,
+            imageUrl,
+            status,
+            difficulty,
+            category,
+            tags,
+            notes,
+            favorite
+        } = req.body;
+
+        if (!characterName || !animeName || !imageUrl) {
+            return res.status(400).json({
+                error: 'Character name, anime name, and image URL are required.'
+            });
+        }
+
+        const characterId =
+            id ||
+            'char-' +
+            Date.now() +
+            '-' +
+            Math.random().toString(36).substring(2, 11);
+
+        const cleanTags = Array.isArray(tags)
+            ? tags
+            : typeof tags === 'string'
+                ? tags
+                    .split(',')
+                    .map(tag => tag.trim())
+                    .filter(Boolean)
+                : [];
+
+        const result = await pool.query(
+            `
+            INSERT INTO characters (
+                id,
+                user_id,
+                character_name,
+                anime_name,
+                image_url,
+                status,
+                difficulty,
+                category,
+                tags,
+                notes,
+                favorite
+            )
+            VALUES (
+                $1,
+                $2,
+                $3,
+                $4,
+                $5,
+                $6,
+                $7,
+                $8,
+                $9,
+                $10,
+                $11
+            )
+            RETURNING
+                id,
+                character_name AS "characterName",
+                anime_name AS "animeName",
+                image_url AS "imageUrl",
+                status,
+                difficulty,
+                category,
+                tags,
+                notes,
+                favorite,
+                created_at AS "createdAt",
+                updated_at AS "updatedAt"
+            `,
+            [
+                characterId,
+                userId,
+                characterName.trim(),
+                animeName.trim(),
+                imageUrl.trim(),
+                status || 'want-to-cosplay',
+                difficulty || 'easy',
+                category || '',
+                cleanTags,
+                notes || '',
+                favorite === true
+            ]
+        );
+
+        res.status(201).json({
+            message: 'Character added successfully.',
+            character: result.rows[0]
+        });
+
+    } catch (error) {
+        console.error('Add character error:', error);
+
+        if (error.code === '23505') {
+            return res.status(409).json({
+                error: 'A character with this ID already exists.'
+            });
+        }
+
+        res.status(500).json({
+            error: 'Something went wrong while adding the character.'
+        });
+    }
+});
+
+
+// UPDATE CHARACTER
+
+app.put('/api/characters/:id', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const characterId = req.params.id;
+
+        const {
+            characterName,
+            animeName,
+            imageUrl,
+            status,
+            difficulty,
+            category,
+            tags,
+            notes,
+            favorite
+        } = req.body;
+
+        const cleanTags = Array.isArray(tags)
+            ? tags
+            : typeof tags === 'string'
+                ? tags
+                    .split(',')
+                    .map(tag => tag.trim())
+                    .filter(Boolean)
+                : [];
+
+        const result = await pool.query(
+            `
+            UPDATE characters
+            SET
+                character_name = $1,
+                anime_name = $2,
+                image_url = $3,
+                status = $4,
+                difficulty = $5,
+                category = $6,
+                tags = $7,
+                notes = $8,
+                favorite = $9,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = $10
+              AND user_id = $11
+            RETURNING
+                id,
+                character_name AS "characterName",
+                anime_name AS "animeName",
+                image_url AS "imageUrl",
+                status,
+                difficulty,
+                category,
+                tags,
+                notes,
+                favorite,
+                created_at AS "createdAt",
+                updated_at AS "updatedAt"
+            `,
+            [
+                characterName?.trim(),
+                animeName?.trim(),
+                imageUrl?.trim(),
+                status,
+                difficulty,
+                category || '',
+                cleanTags,
+                notes || '',
+                favorite === true,
+                characterId,
+                userId
+            ]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                error: 'Character not found.'
+            });
+        }
+
+        res.json({
+            message: 'Character updated successfully.',
+            character: result.rows[0]
+        });
+
+    } catch (error) {
+        console.error('Update character error:', error);
+
+        res.status(500).json({
+            error: 'Something went wrong while updating the character.'
+        });
+    }
+});
+
+
+// DELETE ONE CHARACTER
+
+app.delete('/api/characters/:id', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const characterId = req.params.id;
+
+        const result = await pool.query(
+            `
+            DELETE FROM characters
+            WHERE id = $1
+              AND user_id = $2
+            RETURNING id
+            `,
+            [characterId, userId]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                error: 'Character not found.'
+            });
+        }
+
+        res.json({
+            message: 'Character deleted successfully.'
+        });
+
+    } catch (error) {
+        console.error('Delete character error:', error);
+
+        res.status(500).json({
+            error: 'Something went wrong while deleting the character.'
+        });
+    }
+});
+
+
+// DELETE ALL CHARACTERS FOR LOGGED-IN USER
+
+app.delete('/api/characters', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const result = await pool.query(
+            `
+            DELETE FROM characters
+            WHERE user_id = $1
+            `,
+            [userId]
+        );
+
+        res.json({
+            message: 'All characters deleted successfully.',
+            deletedCount: result.rowCount
+        });
+
+    } catch (error) {
+        console.error('Delete all characters error:', error);
+
+        res.status(500).json({
+            error: 'Something went wrong while deleting characters.'
+        });
+    }
+});
 
 // START SERVER
 
