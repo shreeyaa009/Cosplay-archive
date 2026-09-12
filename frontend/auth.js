@@ -297,11 +297,6 @@ if (signupForm) {
                     .value
                     .trim();
 
-            const email =
-                document.getElementById('signupEmail')
-                    .value
-                    .trim();
-
             const password =
                 document.getElementById('signupPassword')
                     .value;
@@ -310,11 +305,6 @@ if (signupForm) {
             const usernameError =
                 document.getElementById(
                     'signupUsernameError'
-                );
-
-            const emailError =
-                document.getElementById(
-                    'signupEmailError'
                 );
 
             const passwordError =
@@ -334,7 +324,6 @@ if (signupForm) {
 
 
             usernameError.textContent = '';
-            emailError.textContent = '';
             passwordError.textContent = '';
 
             clearMessage(message);
@@ -358,21 +347,6 @@ if (signupForm) {
 
                 return;
             }
-
-
-            /* Email validation */
-
-            const emailRegex =
-                /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-            if (!emailRegex.test(email)) {
-
-                emailError.textContent =
-                    'Please enter a valid email address.';
-
-                return;
-            }
-
 
             /* Password validation */
 
@@ -431,7 +405,6 @@ if (signupForm) {
 
                         body: JSON.stringify({
                             username,
-                            email,
                             password
                         })
                     }
