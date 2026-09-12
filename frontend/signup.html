@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sign Up ♡ Cosplay Archive</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Pacifico&family=Varela+Round&family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="auth-page">
+
+        <div class="auth-floating-decorations">
+            <span class="auth-float float-1">♡</span>
+            <span class="auth-float float-2">✦</span>
+            <span class="auth-float float-3">🌸</span>
+            <span class="auth-float float-4">✨</span>
+            <span class="auth-float float-5">🎀</span>
+            <span class="auth-float float-6">♡</span>
+        </div>
+
+
+        <main class="auth-card signup-card">
+
+            <div class="auth-sticker-wrap">
+                <img
+                    src="https://i.pinimg.com/736x/31/ab/a6/31aba6b19f86ae88cf682eb5f07e886b.jpg"
+                    alt="Cute anime character"
+                    class="auth-sticker"
+                    onerror="this.style.display='none';"
+                >
+            </div>
+
+
+            <div class="auth-heading">
+
+                <span class="auth-mini-title">
+                    ✨ New cosplayer joining? ✨
+                </span>
+
+                <h1>
+                    Create Account
+                </h1>
+
+                <p>
+                    Start your own little cosplay archive ♡
+                </p>
+
+            </div>
+
+
+            <form id="signupForm" class="auth-form">
+
+                <div class="auth-field">
+
+                    <label for="signupUsername">
+                        Username
+                    </label>
+
+                    <div class="auth-input-wrap">
+                        <span class="auth-input-icon">🌸</span>
+
+                        <input
+                            type="text"
+                            id="signupUsername"
+                            name="username"
+                            placeholder="choose your username"
+                            autocomplete="username"
+                            minlength="3"
+                            maxlength="50"
+                            required
+                        >
+                    </div>
+
+                    <small class="field-hint">
+                        3–50 characters
+                    </small>
+
+                    <small class="field-error" id="signupUsernameError"></small>
+
+                </div>
+
+
+                <div class="auth-field">
+
+                    <label for="signupEmail">
+                        Email
+                    </label>
+
+                    <div class="auth-input-wrap">
+                        <span class="auth-input-icon">💌</span>
+
+                        <input
+                            type="email"
+                            id="signupEmail"
+                            name="email"
+                            placeholder="your@email.com"
+                            autocomplete="email"
+                            required
+                        >
+                    </div>
+
+                    <small class="field-error" id="signupEmailError"></small>
+
+                </div>
+
+
+                <div class="auth-field">
+
+                    <label for="signupPassword">
+                        Password
+                    </label>
+
+                    <div class="auth-input-wrap">
+
+                        <span class="auth-input-icon">🔒</span>
+
+                        <input
+                            type="password"
+                            id="signupPassword"
+                            name="password"
+                            placeholder="create a strong password"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            data-target="signupPassword"
+                            aria-label="Show password"
+                        >
+                            ♡
+                        </button>
+
+                    </div>
+
+                    <div class="password-rules">
+
+                        <span id="ruleLength">
+                            ♡ 8+ characters
+                        </span>
+
+                        <span id="ruleUpper">
+                            ♡ Uppercase
+                        </span>
+
+                        <span id="ruleLower">
+                            ♡ Lowercase
+                        </span>
+
+                        <span id="ruleNumber">
+                            ♡ Number
+                        </span>
+
+                    </div>
+
+                    <small class="field-error" id="signupPasswordError"></small>
+
+                </div>
+
+
+                <div class="auth-message" id="signupMessage"></div>
+
+
+                <button
+                    type="submit"
+                    class="auth-submit"
+                    id="signupButton"
+                >
+                    <span>🎀</span>
+                    <span>Create My Archive</span>
+                    <span>♡</span>
+                </button>
+
+            </form>
+
+
+            <div class="auth-divider">
+                <span>✦</span>
+                <div></div>
+                <span>♡</span>
+                <div></div>
+                <span>✦</span>
+            </div>
+
+
+            <p class="auth-switch">
+                Already have an account?
+
+                <a href="login.html">
+                    Log in ♡
+                </a>
+            </p>
+
+
+            <a href="index.html" class="back-home">
+                ← Back to Cosplay Archive
+            </a>
+
+        </main>
+
+    </div>
+
+    <script src="auth.js"></script>
+
+</body>
+</html>
